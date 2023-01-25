@@ -21,7 +21,7 @@ public class RestApiJavaApplication {
     Transcript transcript = new Transcript();
     transcript.setAudio_url(Constants.AUDIO_URL);
     System.out.println(transcript);
-    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    Gson gson = new Gson();
     String jsonRequest = gson.toJson(transcript);
     System.out.println(jsonRequest);
 
