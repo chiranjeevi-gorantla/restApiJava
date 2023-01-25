@@ -2,6 +2,7 @@ package com.chirango.restApiJava;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class RestApiJavaApplication {
 
   public static void main(String[] args) throws Exception {
 
-    //		SpringApplication.run(RestApiJavaApplication.class, args);
+//    		SpringApplication.run(RestApiJavaApplication.class, args);
 
     Transcript transcript = new Transcript();
     transcript.setAudio_url(Constants.AUDIO_URL);
@@ -38,31 +39,31 @@ public class RestApiJavaApplication {
         httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
     System.out.println(postResponse.body());
 
-//    transcript = gson.fromJson(postResponse.body(), Transcript.class);
-//    System.out.println(transcript.getId());
-//
-//    // GET Request
-//    HttpRequest getRequest =
-//        HttpRequest.newBuilder()
-//            .uri(new URI(Constants.URI + transcript.getId()))
-//            .header("Authorization", Constants.API_KEY)
-//            .build();
-//
-//    while (true) {
-//      HttpResponse<String> getResponse =
-//          httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
-//      transcript = gson.fromJson(getResponse.body(), Transcript.class);
-//
-//      System.out.println(transcript.getStatus());
-//
-//      if ("completed".equals(transcript.getStatus()) || "error".equals(transcript.getStatus())) {
-//        break;
-//      }
-//      Thread.sleep(1000);
-//    }
-//
-//    System.out.println("Transcription Completed");
-//    System.out.println(transcript.getText());
+    transcript = gson.fromJson(postResponse.body(), Transcript.class);
+    System.out.println(transcript.getId());
+
+    // GET Request
+    HttpRequest getRequest =
+        HttpRequest.newBuilder()
+            .uri(new URI(Constants.URI + "/" + transcript.getId()))
+            .header("Authorization", Constants.API_KEY)
+            .build();
+
+    while (true) {
+      HttpResponse<String> getResponse =
+          httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
+      transcript = gson.fromJson(getResponse.body(), Transcript.class);
+
+      System.out.println(transcript.getStatus());
+
+      if ("completed".equals(transcript.getStatus()) || "error".equals(transcript.getStatus())) {
+        break;
+      }
+      Thread.sleep(1000);
+    }
+
+    System.out.println("Transcription Completed");
+    System.out.println(transcript.getText());
       }
 
 }
